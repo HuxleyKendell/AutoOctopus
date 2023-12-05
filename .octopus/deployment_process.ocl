@@ -1,0 +1,191 @@
+step "sql-create-database-if-not-exists" {
+    name = "SQL - Create Database If Not Exists"
+
+    action {
+        is_required = true
+        properties = {
+            createCommandTimeout = "30"
+            createDatabaseName = "WidgetDev"
+            createSqlDatabaseRetryAttempts = "0"
+            createSqlLoginPasswordWhoHasRights = "#{password}"
+            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
+            createSqlServer = "#{server}"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "5"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "sql-create-database-if-not-exists-test" {
+    name = "SQL - Create Database If Not Exists - Test"
+
+    action {
+        properties = {
+            createCommandTimeout = "30"
+            createDatabaseName = "WidgetTest"
+            createSqlDatabaseRetryAttempts = "0"
+            createSqlLoginPasswordWhoHasRights = "#{password}"
+            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
+            createSqlServer = "#{server}"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "5"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "sql-create-database-if-not-exists-clone-3" {
+    name = "SQL - Create Database If Not Exists - Prod"
+
+    action {
+        properties = {
+            createCommandTimeout = "30"
+            createDatabaseName = "WidgetProd"
+            createSqlDatabaseRetryAttempts = "0"
+            createSqlLoginPasswordWhoHasRights = "#{password}"
+            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
+            createSqlServer = "#{server}"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "5"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "sql-create-database-if-not-exists-clone-2" {
+    name = "SQL - Create Database If Not Exists - Shadow"
+
+    action {
+        properties = {
+            createCommandTimeout = "30"
+            createDatabaseName = "WidgetZShadow"
+            createSqlDatabaseRetryAttempts = "0"
+            createSqlLoginPasswordWhoHasRights = "#{password}"
+            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
+            createSqlServer = "#{server}"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "5"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "sql-create-database-if-not-exists-clone-1" {
+    name = "SQL - Create Database If Not Exists - Build"
+
+    action {
+        properties = {
+            createCommandTimeout = "30"
+            createDatabaseName = "WidgetZBuild"
+            createSqlDatabaseRetryAttempts = "0"
+            createSqlLoginPasswordWhoHasRights = "#{password}"
+            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
+            createSqlServer = "#{server}"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "5"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "sql-create-database-if-not-exists-check" {
+    name = "SQL - Create Database If Not Exists - Check"
+
+    action {
+        properties = {
+            createCommandTimeout = "30"
+            createDatabaseName = "WidgetZCheck"
+            createSqlDatabaseRetryAttempts = "0"
+            createSqlLoginPasswordWhoHasRights = "#{password}"
+            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
+            createSqlServer = "#{server}"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "5"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "build-stage" {
+    name = "Build Stage"
+
+    action {
+        action_type = "Octopus.Script"
+        is_required = true
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $flyway_license_key = "$licensekey"
+                $project_workspace = "$workspace"
+                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
+                $FIRST_UNDO_SCRIPT = "002.20230703112421"
+                $user = "$user"
+                $password = "$password"
+                
+                
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+                
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
+                
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="Reports/ValidateUScripts"
+                
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "report-creation-prodution-release" {
+    name = "Report Creation - Prodution Release"
+
+    action {
+        action_type = "Octopus.Script"
+        is_required = true
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $flyway_license_key = "FL017D0549464A6CC40229E069E825513B15D4F0D2645DAAEE89CDA0786C3A668A1875ABEEBE7841FC3B4F8E0881FA90B3B0C3B28E5263CF9A75CF7611A32445A9D03AC2C73A851F5177A1FD90CE0BC28254FEB2E77CBB131986CA3FCDE9B46F95F0D63FAAAC892B55A1C1C0AC204AA8A7C4BA0370D67FD55BDBBA5334B91039A63F3B91A700BCC4F569EB739C77774D964AC440A8E152B6FC21D6FA50EC7F9BCCBD1E09ECFDED951CA6ABF7FE7AA3087E11451712803C47D919A8770CD98FA23E2482D90823C9B4C8F6DC8A3533342F2287152011FBCF7D0351493D42DC6256B766B470FCEF4F74197780B292390731055B346AA7A11D1DF72B6190FB41F20D18B0"
+                $project_workspace = "C:\Octopus\Flyway-AutoPilot"
+                $env_JDBC = "jdbc:sqlserver://localhost;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $FIRST_UNDO_SCRIPT = "002.20230703112421"
+                $user = "Octopus"
+                $password = "Redg@te1"
+                $FailOnDrift = "false"
+                $buildUrl = "jdbc:sqlserver://localhost;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
+                
+                flyway check -dryrun -changes -drift migrate info -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="\reports\ProdRelease.html" -user="$user" -password="$password"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "databasepool"
+    }
+}
+
+step "production-deployment" {
+    name = "Production Deployment"
+
+    action {
+        action_type = "Octopus.Script"
+        is_required = true
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $flyway_license_key = "FL017D0549464A6CC40229E069E825513B15D4F0D2645DAAEE89CDA0786C3A668A1875ABEEBE7841FC3B4F8E0881FA90B3B0C3B28E5263CF9A75CF7611A32445A9D03AC2C73A851F5177A1FD90CE0BC28254FEB2E77CBB131986CA3FCDE9B46F95F0D63FAAAC892B55A1C1C0AC204AA8A7C4BA0370D67FD55BDBBA5334B91039A63F3B91A700BCC4F569EB739C77774D964AC440A8E152B6FC21D6FA50EC7F9BCCBD1E09ECFDED951CA6ABF7FE7AA3087E11451712803C47D919A8770CD98FA23E2482D90823C9B4C8F6DC8A3533342F2287152011FBCF7D0351493D42DC6256B766B470FCEF4F74197780B292390731055B346AA7A11D1DF72B6190FB41F20D18B0"
+                $project_workspace = "C:\Octopus\Flyway-AutoPilot"
+                $env_JDBC = "jdbc:sqlserver://localhost;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $FIRST_UNDO_SCRIPT = "002.20230703112421"
+                $user = "Octopus"
+                $password = "Redg@te1"
+                
+                
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+                
+                
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "databasepool"
+    }
+}
