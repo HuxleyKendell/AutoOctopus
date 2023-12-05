@@ -1,0 +1,8 @@
+flywayDesktop = { }
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[environments.development]
+user = "Octopus"
+password = "${localSecret.Flyway Desktop ef8ce9b5-4e55-45e4-9e2c-263108facca6}"
