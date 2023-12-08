@@ -23,6 +23,7 @@ step "sql-create-database-if-not-exists-test" {
 
     action {
         environments = ["development"]
+        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetTest"
@@ -42,6 +43,7 @@ step "sql-create-database-if-not-exists-clone-3" {
 
     action {
         environments = ["development"]
+        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetProd"
@@ -61,6 +63,7 @@ step "sql-create-database-if-not-exists-clone-2" {
 
     action {
         environments = ["development"]
+        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetZShadow"
@@ -80,6 +83,7 @@ step "sql-create-database-if-not-exists-clone-1" {
 
     action {
         environments = ["development"]
+        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetZBuild"
@@ -99,6 +103,7 @@ step "sql-create-database-if-not-exists-check" {
 
     action {
         environments = ["development"]
+        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetZCheck"
@@ -121,26 +126,22 @@ step "build-stage" {
         environments = ["build"]
         is_required = true
         properties = {
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                $flyway_license_key = "$licensekey"
-                $project_workspace = "$workspace"
-                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
-                $FIRST_UNDO_SCRIPT = "002.20230703112421"
-                $user = "$user"
-                $password = "$password"
-                
-                
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
-                
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
-                
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="Reports/ValidateUScripts"
-                
-                EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "autopilotrepo"
+            Octopus.Action.Package.PackageId = "HuxleyKendell/AutoOctopus"
+            Octopus.Action.Script.ScriptFileName = "StageDeploy.ps1"
+            Octopus.Action.Script.ScriptSource = "Package"
         }
         worker_pool = "databasepool"
+
+        packages {
+            acquisition_location = "Server"
+            feed = "autopilotrepo"
+            package_id = "HuxleyKendell/AutoOctopus"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
     }
 }
 
