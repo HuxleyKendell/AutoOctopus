@@ -141,6 +141,17 @@ step "build-stage" {
             Octopus.Action.Script.Syntax = "PowerShell"
         }
         worker_pool = "databasepool"
+
+        packages "AutoOctopus" {
+            acquisition_location = "Server"
+            feed = "autopilotrepo"
+            package_id = "HuxleyKendell/AutoOctopus"
+            properties = {
+                Extract = "True"
+                Purpose = ""
+                SelectionMode = "immediate"
+            }
+        }
     }
 }
 
