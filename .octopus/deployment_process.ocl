@@ -3,7 +3,6 @@ step "sql-create-database-if-not-exists" {
 
     action {
         environments = ["development"]
-        is_disabled = true
         is_required = true
         properties = {
             createCommandTimeout = "30"
