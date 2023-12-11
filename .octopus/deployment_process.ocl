@@ -14,7 +14,7 @@ step "sql-create-database-if-not-exists" {
             Octopus.Action.Template.Id = "ActionTemplates-21"
             Octopus.Action.Template.Version = "5"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
 
@@ -23,7 +23,6 @@ step "sql-create-database-if-not-exists-test" {
 
     action {
         environments = ["development"]
-        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetTest"
@@ -34,7 +33,7 @@ step "sql-create-database-if-not-exists-test" {
             Octopus.Action.Template.Id = "ActionTemplates-21"
             Octopus.Action.Template.Version = "5"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
 
@@ -43,7 +42,6 @@ step "sql-create-database-if-not-exists-clone-3" {
 
     action {
         environments = ["development"]
-        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetProd"
@@ -54,7 +52,7 @@ step "sql-create-database-if-not-exists-clone-3" {
             Octopus.Action.Template.Id = "ActionTemplates-21"
             Octopus.Action.Template.Version = "5"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
 
@@ -63,7 +61,6 @@ step "sql-create-database-if-not-exists-clone-2" {
 
     action {
         environments = ["development"]
-        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetZShadow"
@@ -74,7 +71,7 @@ step "sql-create-database-if-not-exists-clone-2" {
             Octopus.Action.Template.Id = "ActionTemplates-21"
             Octopus.Action.Template.Version = "5"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
 
@@ -83,7 +80,6 @@ step "sql-create-database-if-not-exists-clone-1" {
 
     action {
         environments = ["development"]
-        is_disabled = true
         properties = {
             createCommandTimeout = "30"
             createDatabaseName = "WidgetZBuild"
@@ -94,7 +90,7 @@ step "sql-create-database-if-not-exists-clone-1" {
             Octopus.Action.Template.Id = "ActionTemplates-21"
             Octopus.Action.Template.Version = "5"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
 
@@ -114,7 +110,7 @@ step "sql-create-database-if-not-exists-check" {
             Octopus.Action.Template.Id = "ActionTemplates-21"
             Octopus.Action.Template.Version = "5"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
 
@@ -124,7 +120,6 @@ step "build-stage" {
     action {
         action_type = "Octopus.Script"
         environments = ["build"]
-        is_required = true
         properties = {
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "autopilotrepo"
@@ -132,7 +127,7 @@ step "build-stage" {
             Octopus.Action.Script.ScriptFileName = "StageDeploy.ps1"
             Octopus.Action.Script.ScriptSource = "Package"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
 
         packages {
             acquisition_location = "Server"
@@ -157,6 +152,7 @@ step "build-stage" {
 }
 
 step "report-creation-prodution-release" {
+    condition = "Always"
     name = "Report Creation - Prodution Release"
 
     action {
@@ -179,11 +175,12 @@ step "report-creation-prodution-release" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
 
 step "production-deployment" {
+    condition = "Always"
     name = "Production Deployment"
 
     action {
@@ -207,6 +204,6 @@ step "production-deployment" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "databasepool"
+        worker_pool = "precisionpool"
     }
 }
