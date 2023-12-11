@@ -6,10 +6,10 @@ variable "user" {
     value "Octopus" {}
 }
 
-variable "workspace" {
-    value "C:\\Octopus\\Flyway-AutoPilot" {}
-}
-
 variable "server" {
     value "localhost" {}
+}
+
+variable "workspace" {
+    value "C:\\Users\\redgate\\Desktop\\Flyway-AutoPilot" {}
 }
