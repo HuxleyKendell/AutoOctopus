@@ -11,5 +11,5 @@ variable "workspace" {
 }
 
 variable "server" {
-    value "WIN2016" {}
+    value "localhost" {}
 }
