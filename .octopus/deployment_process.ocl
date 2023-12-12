@@ -107,7 +107,7 @@ step "production-deployment" {
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
-            feed = "octopus-server-built-in"
+            feed = "autopilotrepo"
             package_id = "HuxleyKendell/AutoOctopus"
             properties = {
                 Extract = "True"
