@@ -137,17 +137,6 @@ step "build-stage" {
                 SelectionMode = "immediate"
             }
         }
-
-        packages "migrations" {
-            acquisition_location = "Server"
-            feed = "autopilotrepo"
-            package_id = "HuxleyKendell/AutoOctopus"
-            properties = {
-                Extract = "True"
-                Purpose = ""
-                SelectionMode = "immediate"
-            }
-        }
     }
 }
 
