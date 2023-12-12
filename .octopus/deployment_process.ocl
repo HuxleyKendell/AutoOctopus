@@ -1,119 +1,3 @@
-step "sql-create-database-if-not-exists" {
-    name = "SQL - Create Database If Not Exists"
-
-    action {
-        environments = ["development"]
-        is_required = true
-        properties = {
-            createCommandTimeout = "30"
-            createDatabaseName = "WidgetDev"
-            createSqlDatabaseRetryAttempts = "0"
-            createSqlLoginPasswordWhoHasRights = "#{password}"
-            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
-            createSqlServer = "#{server}"
-            Octopus.Action.Template.Id = "ActionTemplates-21"
-            Octopus.Action.Template.Version = "5"
-        }
-        worker_pool = "precisionpool"
-    }
-}
-
-step "sql-create-database-if-not-exists-test" {
-    name = "SQL - Create Database If Not Exists - Test"
-
-    action {
-        environments = ["development"]
-        properties = {
-            createCommandTimeout = "30"
-            createDatabaseName = "WidgetTest"
-            createSqlDatabaseRetryAttempts = "0"
-            createSqlLoginPasswordWhoHasRights = "#{password}"
-            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
-            createSqlServer = "#{server}"
-            Octopus.Action.Template.Id = "ActionTemplates-21"
-            Octopus.Action.Template.Version = "5"
-        }
-        worker_pool = "precisionpool"
-    }
-}
-
-step "sql-create-database-if-not-exists-clone-3" {
-    name = "SQL - Create Database If Not Exists - Prod"
-
-    action {
-        environments = ["development"]
-        properties = {
-            createCommandTimeout = "30"
-            createDatabaseName = "WidgetProd"
-            createSqlDatabaseRetryAttempts = "0"
-            createSqlLoginPasswordWhoHasRights = "#{password}"
-            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
-            createSqlServer = "#{server}"
-            Octopus.Action.Template.Id = "ActionTemplates-21"
-            Octopus.Action.Template.Version = "5"
-        }
-        worker_pool = "precisionpool"
-    }
-}
-
-step "sql-create-database-if-not-exists-clone-2" {
-    name = "SQL - Create Database If Not Exists - Shadow"
-
-    action {
-        environments = ["development"]
-        properties = {
-            createCommandTimeout = "30"
-            createDatabaseName = "WidgetZShadow"
-            createSqlDatabaseRetryAttempts = "0"
-            createSqlLoginPasswordWhoHasRights = "#{password}"
-            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
-            createSqlServer = "#{server}"
-            Octopus.Action.Template.Id = "ActionTemplates-21"
-            Octopus.Action.Template.Version = "5"
-        }
-        worker_pool = "precisionpool"
-    }
-}
-
-step "sql-create-database-if-not-exists-clone-1" {
-    name = "SQL - Create Database If Not Exists - Build"
-
-    action {
-        environments = ["development"]
-        properties = {
-            createCommandTimeout = "30"
-            createDatabaseName = "WidgetZBuild"
-            createSqlDatabaseRetryAttempts = "0"
-            createSqlLoginPasswordWhoHasRights = "#{password}"
-            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
-            createSqlServer = "#{server}"
-            Octopus.Action.Template.Id = "ActionTemplates-21"
-            Octopus.Action.Template.Version = "5"
-        }
-        worker_pool = "precisionpool"
-    }
-}
-
-step "sql-create-database-if-not-exists-check" {
-    name = "SQL - Create Database If Not Exists - Check"
-
-    action {
-        environments = ["development"]
-        is_disabled = true
-        properties = {
-            createCommandTimeout = "30"
-            createDatabaseName = "WidgetZCheck"
-            createSqlDatabaseRetryAttempts = "0"
-            createSqlLoginPasswordWhoHasRights = "#{password}"
-            createSqlLoginUserWhoHasCreateUserRights = "#{user}"
-            createSqlServer = "#{server}"
-            Octopus.Action.Template.Id = "ActionTemplates-21"
-            Octopus.Action.Template.Version = "5"
-        }
-        worker_pool = "precisionpool"
-    }
-}
-
 step "build-stage" {
     name = "Build Stage"
 
@@ -121,19 +5,32 @@ step "build-stage" {
         action_type = "Octopus.Script"
         environments = ["build"]
         properties = {
-            Octopus.Action.Package.DownloadOnTentacle = "False"
-            Octopus.Action.Package.FeedId = "autopilotrepo"
-            Octopus.Action.Package.PackageId = "HuxleyKendell/AutoOctopus"
-            Octopus.Action.Script.ScriptFileName = "StageDeploy.ps1"
-            Octopus.Action.Script.ScriptSource = "Package"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                cd "AutoOctopus"
+                $flyway_license_key = "$licensekey"
+                $project_workspace = "$workspace"
+                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $FIRST_UNDO_SCRIPT = "002.20230703112421"
+                $user = "$user"
+                $password = "$password"
+                
+                
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="Reports/ValidateUScripts"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
         }
         worker_pool = "precisionpool"
 
-        packages {
+        packages "AutoOctopus" {
             acquisition_location = "Server"
             feed = "autopilotrepo"
             package_id = "HuxleyKendell/AutoOctopus"
             properties = {
+                Extract = "True"
+                Purpose = ""
                 SelectionMode = "immediate"
             }
         }
