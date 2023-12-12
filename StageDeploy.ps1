@@ -6,8 +6,8 @@ $user = "Octopus"
 $password = "Redg@te1"
 
 
-flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" -locations="filesystem:migrations" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
-flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" -locations="filesystem:migrations" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
-flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" -locations="filesystem:migrations" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="Reports/ValidateUScripts"
+flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" -locations="/migrations" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" -locations="/migrations" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
+flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" -locations="/migrations" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="Reports/ValidateUScripts"
 
 
