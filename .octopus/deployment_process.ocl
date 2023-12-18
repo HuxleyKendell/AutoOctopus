@@ -27,7 +27,7 @@ step "build-stage" {
         packages "AutoOctopus" {
             acquisition_location = "Server"
             feed = "autopilotrepo"
-            package_id = "HuxleyKendell/AutoOctopus"
+            package_id = "#{gitRepoID}"
             properties = {
                 Extract = "True"
                 Purpose = ""
@@ -67,7 +67,7 @@ step "report-creation-prodution-release" {
         packages "AutoOctopus" {
             acquisition_location = "Server"
             feed = "autopilotrepo"
-            package_id = "HuxleyKendell/AutoOctopus"
+            package_id = "#{gitRepoID}"
             properties = {
                 Extract = "True"
                 Purpose = ""
@@ -108,7 +108,7 @@ step "production-deployment" {
         packages "AutoOctopus" {
             acquisition_location = "Server"
             feed = "autopilotrepo"
-            package_id = "HuxleyKendell/AutoOctopus"
+            package_id = "#{gitRepoID}"
             properties = {
                 Extract = "True"
                 Purpose = ""
