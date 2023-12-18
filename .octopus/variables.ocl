@@ -13,3 +13,11 @@ variable "server" {
 variable "workspace" {
     value "C:\\Users\\redgate\\Desktop\\Flyway-AutoPilot" {}
 }
+
+variable "gitRepoName" {
+    value "AutoPilot" {}
+}
+
+variable "gitRepoID" {
+    value "HuxleyKendell/AutoOctopus" {}
+}
