@@ -26,8 +26,8 @@ step "build-stage" {
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
-            feed = "autopilotrepo"
-            package_id = "HuxleyKendell/AutoOctopus"
+            feed = "#{gitRepoName}"
+            package_id = "#{gitRepoID}"
             properties = {
                 Extract = "True"
                 Purpose = ""
