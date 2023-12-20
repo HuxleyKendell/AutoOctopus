@@ -1,0 +1,119 @@
+step "build-stage" {
+    name = "Build Stage"
+
+    action {
+        action_type = "Octopus.Script"
+        environments = ["build"]
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                cd "AutoOctopus"
+                $flyway_license_key = "$licensekey"
+                $project_workspace = "$workspace"
+                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $FIRST_UNDO_SCRIPT = "002.20230703112421"
+                $user = "$user"
+                $password = "$password"
+                
+                
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="Reports/ValidateUScripts"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "precisionpool"
+
+        packages "AutoOctopus" {
+            acquisition_location = "Server"
+            feed = "autopilotrepo"
+            package_id = "#{gitRepoID}"
+            properties = {
+                Extract = "True"
+                Purpose = ""
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "report-creation-prodution-release" {
+    condition = "Always"
+    name = "Report Creation - Prodution Release"
+
+    action {
+        action_type = "Octopus.Script"
+        environments = ["staging"]
+        is_required = true
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                cd "AutoOctopus"
+                $flyway_license_key = "$licensekey"
+                $project_workspace = "$workspace"
+                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $FIRST_UNDO_SCRIPT = "002.20230703112421"
+                $user = "$user"
+                $password = "$password"
+                $FailOnDrift = "false"
+                $buildUrl = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
+                
+                flyway check -dryrun -changes -drift migrate info -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$project_workspace\Reports\$OctopusParameters["Octopus.Release.Id"]ProdRelease.html" -user="$user" -password="$password"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "precisionpool"
+
+        packages "AutoOctopus" {
+            acquisition_location = "Server"
+            feed = "autopilotrepo"
+            package_id = "#{gitRepoID}"
+            properties = {
+                Extract = "True"
+                Purpose = ""
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "production-deployment" {
+    condition = "Always"
+    name = "Production Deployment"
+
+    action {
+        action_type = "Octopus.Script"
+        environments = ["production"]
+        is_required = true
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                cd "AutoOctopus"
+                $flyway_license_key = "$licensekey"
+                $project_workspace = "$workspace"
+                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $FIRST_UNDO_SCRIPT = "002.20230703112421"
+                $user = "$user"
+                $password = "$password"
+                
+                
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+                
+                
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "precisionpool"
+
+        packages "AutoOctopus" {
+            acquisition_location = "Server"
+            feed = "autopilotrepo"
+            package_id = "#{gitRepoID}"
+            properties = {
+                Extract = "True"
+                Purpose = ""
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}

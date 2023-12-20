@@ -3,8 +3,7 @@ name = "FlywayTrialProject"
 databaseType = "SqlServer"
 
 [environments.development]
-url = "jdbc:sqlserver://localhost;databaseName=WidgetDev;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
-schemas = [ ]
+url = "jdbc:sqlserver://localhost;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
 displayName = "Development database"
 
 [environments.shadow]
@@ -26,7 +25,6 @@ validateMigrationNaming = true
 defaultSchema = "dbo"
 baselineOnMigrate = true
 baselineVersion = "001_20230703120714"
-
 
 [flywayDesktop]
 developmentEnvironment = "development"
