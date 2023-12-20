@@ -10,14 +10,14 @@ variable "server" {
     value "localhost" {}
 }
 
-variable "workspace" {
-    value "C:\\Users\\redgate\\Desktop\\Flyway-AutoPilot" {}
-}
-
 variable "gitRepoName" {
     value "AutoPilot" {}
 }
 
 variable "gitRepoID" {
     value "HuxleyKendell/AutoOctopus" {}
+}
+
+variable "workspace" {
+    value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
