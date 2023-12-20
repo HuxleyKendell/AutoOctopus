@@ -57,7 +57,7 @@ step "report-creation-prodution-release" {
                 $FailOnDrift = "false"
                 $buildUrl = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
                 
-                flyway check -dryrun -changes -drift migrate info -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="\reports\ProdRelease.html" -user="$user" -password="$password"
+                flyway check -dryrun -changes -drift migrate info -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$project_workspace\Reports\$OctopusParameters["Octopus.Release.Id"]ProdRelease.html" -user="$user" -password="$password"
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
