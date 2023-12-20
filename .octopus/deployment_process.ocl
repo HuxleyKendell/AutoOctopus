@@ -15,7 +15,7 @@ step "build-stage" {
                 $password = "$password"
                 
                 
-                
+                Get-ChildItem $OctopusParameters["Octopus.Action.Package[AutoOctopus].Path"]
                 
                 flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
                 flyway -user="$user" -locations="$OctopusParameters["Octopus.Action.Package[AutoOctopus].Path"]" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
