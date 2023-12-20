@@ -98,7 +98,7 @@ step "production-deployment" {
                 $password = "$password"
                 
                 
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="$OctopusParameters["Octopus.Action.Package[AutoOctopus].Path"]" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
                 
                 
                 EOT
