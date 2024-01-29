@@ -23,5 +23,5 @@ variable "workspace" {
 }
 
 variable "OctopusPrintEvaluatedVariables" {
-    value "true" {}
+    value "false" {}
 }
