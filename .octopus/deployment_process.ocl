@@ -14,7 +14,7 @@ step "build-stage" {
                 $user = "$user"
                 $password = "$password"
                 
-                $basePath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].Path"]
+                $basePath = "$OctopusParameters["Octopus.Action.Package[AutoOctopus].Path"]"
                 $migrationsPath = "$basePath\migrations"
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
