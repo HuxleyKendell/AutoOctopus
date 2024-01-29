@@ -23,7 +23,8 @@ step "build-stage" {
                 
                 flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\CleanDB"
                 
-                flyway -user="$user" -locations="$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\ValidateVScripts"
+                Get-ChildItem $migrationsPath
+                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\ValidateVScripts"
                 
                 flyway -user="$user" -locations="$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="$extractPath\Reports/ValidateUScripts"
                 EOT
