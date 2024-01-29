@@ -6,7 +6,6 @@ step "build-stage" {
         environments = ["build"]
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
-                cd "AutoOctopus"
                 $flyway_license_key = "$licensekey"
                 $project_workspace = "$workspace"
                 $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
@@ -14,10 +13,9 @@ step "build-stage" {
                 $user = "$user"
                 $password = "$password"
                 
-                
-                $basePath = $OctopusParameters['Octopus.Action.Output.Package.InstallationDirectoryPath']
-                write-host $basePath
-                $migrationsPath = "$basePath\migrations"
+                $extractPath = $OctopusParameters['Octopus.Action.Package.InstallationDirectoryPath'] 
+                write-host $extractPath
+                $migrationsPath = "$extractPath\migrations"
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
                 
