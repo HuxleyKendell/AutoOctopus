@@ -21,9 +21,11 @@ step "build-stage" {
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
                 
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
-                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\ValidateVScripts"
-                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="flyway.toml" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="Reports/ValidateUScripts"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\CleanDB"
+                
+                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\ValidateVScripts"
+                
+                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="$extractPath\Reports/ValidateUScripts"
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
