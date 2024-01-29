@@ -66,7 +66,14 @@ step "report-creation-prodution-release" {
                 $FailOnDrift = "false"
                 $buildUrl = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
                 
-                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$project_workspace\migrations" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="filesystem:$project_workspace\migrations" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$project_workspace\Reports\$OctopusParameters["Octopus.Release.Id"]ProdRelease.html" -user="$user" -password="$password"
+                
+                $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
+                write-host $extractPath
+                $migrationsPath = "$extractPath\migrations"
+                write-host "MP $migrationsPath" 
+                Get-ChildItem $migrationsPath
+                
+                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$extractPath\Reports\$OctopusParameters["Octopus.Release.Id"]ProdRelease.html" -user="$user" -password="$password"
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
@@ -104,8 +111,13 @@ step "production-deployment" {
                 $user = "$user"
                 $password = "$password"
                 
+                $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
+                write-host $extractPath
+                $migrationsPath = "$extractPath\migrations"
+                write-host "MP $migrationsPath" 
+                Get-ChildItem $migrationsPath
                 
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" -locations="$OctopusParameters["Octopus.Action.Package[AutoOctopus].Path"]" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="Reports\CleanDB"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" -locations="$migrationsPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\CleanDB"
                 
                 
                 EOT
