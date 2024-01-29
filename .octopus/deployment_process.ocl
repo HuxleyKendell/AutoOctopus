@@ -27,7 +27,7 @@ step "build-stage" {
         worker_pool = "precisionpool"
 
         packages "AutoOctopus" {
-            acquisition_location = "Server"
+            acquisition_location = "ExecutionTarget"
             feed = "autopilotrepo"
             package_id = "#{gitRepoID}"
             properties = {
