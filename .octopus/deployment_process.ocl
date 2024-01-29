@@ -15,7 +15,7 @@ step "build-stage" {
                 
                 
                 
-                $extractPath = $OctopusParameters['Octopus.Action.Package.InstallationDirectoryPath'] 
+                $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 write-host $extractPath
                 $migrationsPath = "$extractPath\migrations"
                 write-host "MP $migrationsPath" 
