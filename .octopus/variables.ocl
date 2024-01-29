@@ -21,3 +21,7 @@ variable "gitRepoID" {
 variable "workspace" {
     value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
+
+variable "OctopusPrintEvaluatedVariables" {
+    value "true" {}
+}
