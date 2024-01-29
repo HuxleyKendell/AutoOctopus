@@ -13,7 +13,10 @@ step "build-stage" {
                 $user = "$user"
                 $password = "$password"
                 
-                $extractPath = $OctopusParameters['Octopus.Action.Package.InstallationDirectoryPath'] 
+                $extractPath = $OctopusParameters["Octopus.Action[_name_].Output.Package.DirectoryPath"]
+                
+                
+                
                 write-host $extractPath
                 $migrationsPath = "$extractPath\migrations"
                 write-host "MP $migrationsPath" 
