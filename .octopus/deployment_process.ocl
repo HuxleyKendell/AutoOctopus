@@ -74,6 +74,8 @@ step "report-creation-prodution-release" {
                 Get-ChildItem $migrationsPath
                 
                 flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$extractPath\Reports\ProdReport.html" -user="$user" -password="$password"
+                
+                Copy-Item -Path "$extractPath\Reports\ProdReport.html" -Destination C:\Users\redgate\Desktop\ProdReport.html
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
