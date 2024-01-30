@@ -116,7 +116,6 @@ step "production-deployment" {
                 $migrationsPath = "$extractPath\migrations"
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
-                $reportName = "$extractPath\Reports\$OctopusParameters["Octopus.Release.Id"]ProdRelease.html"
                 
                 
                 flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" -locations="filesystem:$migrationsPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\CleanDB"
