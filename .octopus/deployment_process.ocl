@@ -8,7 +8,7 @@ step "build-stage" {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $flyway_license_key = "$licensekey"
                 $project_workspace = "$workspace"
-                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
                 $user = "$user"
                 $password = "$password"
@@ -59,7 +59,7 @@ step "report-creation-prodution-release" {
                 cd "AutoOctopus"
                 $flyway_license_key = "$licensekey"
                 $project_workspace = "$workspace"
-                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $env_JDBC = "jdbc:sqlserver://$server;authentication=sqlPassword;databaseName=WidgetZCheck;encrypt=true;trustServerCertificate=true"
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
                 $user = "$user"
                 $password = "$password"
