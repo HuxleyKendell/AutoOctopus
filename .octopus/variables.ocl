@@ -24,6 +24,6 @@ variable "Flyway.Octopus.Workerpool" {
     value "hosted-ubuntu" {}
 }
 
-variable "Flyway.Database.User2" {
+variable "Flyway.Database.User(OLD)" {
     value "Octopus" {}
 }
