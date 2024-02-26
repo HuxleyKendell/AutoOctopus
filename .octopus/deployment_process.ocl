@@ -30,8 +30,14 @@ step "build-stage" {
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
         }
         worker_pool_variable = "Flyway.Octopus.Workerpool"
+
+        container {
+            feed = "docker-hub"
+            image = "octopuslabs/flyway-workertools"
+        }
 
         packages "AutoOctopus" {
             acquisition_location = "ExecutionTarget"
@@ -81,8 +87,14 @@ step "report-creation-prodution-release" {
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
         }
         worker_pool_variable = "Flyway.Octopus.Workerpool"
+
+        container {
+            feed = "docker-hub"
+            image = "octopuslabs/flyway-workertools"
+        }
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
@@ -128,8 +140,14 @@ step "production-deployment" {
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
         }
         worker_pool_variable = "Flyway.Octopus.Workerpool"
+
+        container {
+            feed = "docker-hub"
+            image = "octopuslabs/flyway-workertools"
+        }
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
