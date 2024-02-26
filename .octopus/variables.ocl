@@ -6,12 +6,6 @@ variable "GitHub.Repo.ID" {
     value "HuxleyKendell/AutoOctopus" {}
 }
 
-variable "Flyway.Octopus.Workerpool" {
-    type = "WorkerPool"
-
-    value "hosted-ubuntu" {}
-}
-
 variable "Flyway.Database.User" {
     value {
         prompt {
@@ -23,6 +17,17 @@ variable "Flyway.Database.User" {
 
 variable "Flyway.Database.Server" {
     value "localhost" {
+        prompt {
+            description = ""
+            label = ""
+        }
+    }
+}
+
+variable "Flyway.Octopus.Workerpool" {
+    type = "WorkerPool"
+
+    value "hosted-ubuntu" {
         prompt {
             description = ""
             label = ""
