@@ -22,7 +22,7 @@ variable "Flyway.Migration.Workspace" {
     value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
 
-variable "Flyway.Octopus.Workerpoo" {
+variable "Flyway.Octopus.Workerpool" {
     type = "WorkerPool"
 
     value "precisionpool" {}
