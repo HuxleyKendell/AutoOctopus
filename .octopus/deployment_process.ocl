@@ -65,7 +65,7 @@ step "report-creation-prodution-release" {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 cd "AutoOctopus"
                 $flyway_license_key = $OctopusParameters["Flyway.Settings.LicenseKey"]
-                $project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
+                #$project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
                 #$env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
                 $env_JDBC=$OctopusParameters["Flyway.Database.JDBC"]
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
@@ -82,7 +82,7 @@ step "report-creation-prodution-release" {
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
                 
-                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$project_workspace\flyway.toml" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$extractPath\Reports\ProdReport.html" -user="$user" -password="$password"
+                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$extractPath\Reports\ProdReport.html" -user="$user" -password="$password"
                 
                 New-OctopusArtifact -Name "ProdReport.html" -Path "$extractPath\Reports\ProdReport.html"
                 
@@ -124,7 +124,7 @@ step "production-deployment" {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 cd "AutoOctopus"
                 $flyway_license_key = $OctopusParameters["Flyway.Settings.LicenseKey"]
-                $project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
+                #$project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
                 #$env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
                 $env_JDBC = $OctopusParameters["Flyway.Database.JDBC"]
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
