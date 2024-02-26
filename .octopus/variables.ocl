@@ -27,7 +27,7 @@ variable "Flyway.Octopus.Workerpool" {
 }
 
 variable "Flyway.Database.Server" {
-    value "localhost:1433" {
+    value "localhost,1433" {
         prompt {
             description = ""
             label = ""
