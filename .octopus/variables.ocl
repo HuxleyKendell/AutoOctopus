@@ -6,17 +6,6 @@ variable "GitHub.Repo.ID" {
     value "HuxleyKendell/AutoOctopus" {}
 }
 
-variable "Flyway.Octopus.Workerpool" {
-    type = "WorkerPool"
-
-    value "hosted-ubuntu" {
-        prompt {
-            description = ""
-            label = ""
-        }
-    }
-}
-
 variable "Flyway.Database.Server" {
     value "localhost:1433" {
         description = ""
@@ -34,6 +23,17 @@ variable "Flyway.Database.User" {
             description = "The MSSQL database username"
             label = ""
             required = true
+        }
+    }
+}
+
+variable "Flyway.Octopus.Workerpool" {
+    type = "WorkerPool"
+
+    value "precisionpool" {
+        prompt {
+            description = ""
+            label = ""
         }
     }
 }
