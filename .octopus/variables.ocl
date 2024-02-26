@@ -21,3 +21,9 @@ variable "Flyway.Database.User" {
 variable "Flyway.Migration.Workspace" {
     value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
+
+variable "Flyway.Octopus.Workerpoo" {
+    type = "WorkerPool"
+
+    value "precisionpool" {}
+}
