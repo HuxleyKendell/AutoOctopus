@@ -14,10 +14,6 @@ variable "Flyway.Migration.Workspace" {
     value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
 
-variable "Flyway.Database.Server" {
-    value "localhost" {}
-}
-
 variable "Flyway.Octopus.Workerpool" {
     type = "WorkerPool"
 
@@ -30,6 +26,15 @@ variable "Flyway.Database.User(OLD)" {
 
 variable "Flyway.Database.User" {
     value {
+        prompt {
+            description = ""
+            label = ""
+        }
+    }
+}
+
+variable "Flyway.Database.Server" {
+    value "localhost" {
         prompt {
             description = ""
             label = ""
