@@ -87,7 +87,6 @@ step "report-creation-prodution-release" {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 cd "AutoOctopus"
                 $flyway_license_key = $OctopusParameters["Flyway.Settings.LicenseKey"]
-                #$project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
                 $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
                 $user = $OctopusParameters["Flyway.Database.User"]
@@ -146,7 +145,6 @@ step "production-deployment" {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 cd "AutoOctopus"
                 $flyway_license_key = $OctopusParameters["Flyway.Settings.LicenseKey"]
-                #$project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
                 $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
                 $user = $OctopusParameters["Flyway.Database.User"]
