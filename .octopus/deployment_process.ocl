@@ -35,8 +35,8 @@ step "build-stage" {
 
         packages "AutoOctopus" {
             acquisition_location = "ExecutionTarget"
-            feed = "autopilotrepo"
-            package_id = "#{gitRepoID}"
+            feed = "github-release"
+            package_id = "#{GitHub.Repo.ID}"
             properties = {
                 Extract = "True"
                 Purpose = ""
@@ -86,8 +86,8 @@ step "report-creation-prodution-release" {
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
-            feed = "autopilotrepo"
-            package_id = "#{gitRepoID}"
+            feed = "github-release"
+            package_id = "#{GitHub.Repo.ID}"
             properties = {
                 Extract = "True"
                 Purpose = ""
@@ -133,8 +133,8 @@ step "production-deployment" {
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
-            feed = "autopilotrepo"
-            package_id = "#{gitRepoID}"
+            feed = "github-release"
+            package_id = "#{GitHub.Repo.ID}"
             properties = {
                 Extract = "True"
                 Purpose = ""
