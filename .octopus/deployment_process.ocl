@@ -94,7 +94,7 @@ step "report-creation-prodution-release" {
                 
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 write-host $extractPath
-                $migrationsPath = "$extractPath\migrations"
+                $migrationsPath = Join-Path $extractPath -ChildPath "migrations"
                 $configPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
                 $reportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ProdReport.html"
                 write-host "MP $migrationsPath" 
@@ -151,7 +151,7 @@ step "production-deployment" {
                 
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 write-host $extractPath
-                $migrationsPath = "$extractPath\migrations"
+                $migrationsPath = Join-Path -Path $extractPath -ChildPath "migrations"
                 $extractPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
                 $reportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "CleanDB"
                 write-host "MP $migrationsPath" 
