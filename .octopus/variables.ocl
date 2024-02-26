@@ -28,10 +28,10 @@ variable "Flyway.Octopus.Workerpool" {
 
 variable "Flyway.Database.Server" {
     value "localhost,1433" {
-        description = "The hostname of the MSSQL server instance."
+        description = ""
 
         prompt {
-            description = ""
+            description = "The hostname of the MSSQL server instance."
             label = ""
         }
     }
