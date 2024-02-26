@@ -152,11 +152,13 @@ step "production-deployment" {
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 write-host $extractPath
                 $migrationsPath = "$extractPath\migrations"
+                $extractPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
+                $reportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "CleanDB"
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
                 
                 
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" -locations="filesystem:$migrationsPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\CleanDB"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath" -locations="filesystem:$migrationsPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$reportPath"
                 
                 
                 EOT
