@@ -32,16 +32,20 @@ step "build-stage" {
                 
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 write-host $extractPath
-                $migrationsPath = "$extractPath\migrations"
+                $migrationsPath = Join-Path -Path $extractPath -ChildPath "migrations"
+                $configPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
+                $cleandbsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "CleanDB"
+                $vScriptsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ValidateVScripts"
+                $uScriptsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ValidateUScripts"
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
                 
-                flyway -user="$user" -password="$password" -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\CleanDB"
+                flyway -user="$user" -password="$password" -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$cleandbsReportPath"
                 
                 Get-ChildItem $migrationsPath
-                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$extractPath\Reports\ValidateVScripts"
+                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$vScriptsReportPath"
                 
-                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="$extractPath\Reports/ValidateUScripts"
+                flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="$uScriptsReportPath"
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
