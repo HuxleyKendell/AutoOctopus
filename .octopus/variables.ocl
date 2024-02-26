@@ -24,26 +24,6 @@ variable "Flyway.Octopus.Workerpool" {
     value "precisionpool" {}
 }
 
-variable "Flyway.Database.JDBC" {
-    value {
-        prompt {
-            description = ""
-            label = ""
-            required = true
-        }
-    }
-}
-
 variable "Flyway.Database.Server" {
     value "localhost" {}
-}
-
-variable "Flyway.CheckDatabase.JDBC" {
-    value {
-        prompt {
-            description = ""
-            label = ""
-            required = true
-        }
-    }
 }
