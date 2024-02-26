@@ -18,12 +18,12 @@ variable "Flyway.Migration.Workspace" {
     value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
 
+variable "Flyway.Database.Server" {
+    value "localhost" {}
+}
+
 variable "Flyway.Octopus.Workerpool" {
     type = "WorkerPool"
 
-    value "precisionpool" {}
-}
-
-variable "Flyway.Database.Server" {
-    value "localhost" {}
+    value "hosted-ubuntu" {}
 }
