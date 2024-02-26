@@ -10,10 +10,6 @@ variable "GitHub.Repo.Name" {
     value "AutoPilot" {}
 }
 
-variable "Flyway.Database.User" {
-    value "Octopus" {}
-}
-
 variable "Flyway.Migration.Workspace" {
     value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
@@ -26,4 +22,8 @@ variable "Flyway.Octopus.Workerpool" {
     type = "WorkerPool"
 
     value "hosted-ubuntu" {}
+}
+
+variable "Flyway.Database.User2" {
+    value "Octopus" {}
 }
