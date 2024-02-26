@@ -37,3 +37,13 @@ variable "Flyway.Database.JDBC" {
 variable "Flyway.Database.Server" {
     value "localhost" {}
 }
+
+variable "Flyway.CheckDatabase.JDBC" {
+    value {
+        prompt {
+            description = ""
+            label = ""
+            required = true
+        }
+    }
+}
