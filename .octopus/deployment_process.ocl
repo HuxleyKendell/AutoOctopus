@@ -5,7 +5,7 @@ step "find-worker-ip-address" {
         action_type = "Octopus.Script"
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
-                ip=$(curl --silent ifconfig.net)
+                $ip=$(curl --silent ifconfig.net)
                 
                 echo "The worker's IP address $ip."
                 echo "Depending on the database server, this IP address will need to be added to the firewall. For example, Azure databases use the 'az sql server firewall-rule create' command to allow external access to an IP address. See https://learn.microsoft.com/en-us/cli/azure/sql/server/firewall-rule?view=azure-cli-latest#az-sql-server-firewall-rule-create for more information."
