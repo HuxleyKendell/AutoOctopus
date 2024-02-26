@@ -10,10 +10,6 @@ variable "GitHub.Repo.Name" {
     value "AutoPilot" {}
 }
 
-variable "Flyway.Database.JDBC" {
-    value "localhost" {}
-}
-
 variable "Flyway.Database.User" {
     value "Octopus" {}
 }
@@ -26,4 +22,18 @@ variable "Flyway.Octopus.Workerpool" {
     type = "WorkerPool"
 
     value "precisionpool" {}
+}
+
+variable "Flyway.Database.JDBC" {
+    value {
+        prompt {
+            description = ""
+            label = ""
+            required = true
+        }
+    }
+}
+
+variable "Flyway.Database.Server" {
+    value "localhost" {}
 }
