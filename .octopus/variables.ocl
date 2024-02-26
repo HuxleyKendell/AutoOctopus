@@ -15,8 +15,10 @@ variable "Flyway.Database.User" {
     }
 }
 
-variable "Flyway.Database.Server" {
-    value "localhost" {
+variable "Flyway.Octopus.Workerpool" {
+    type = "WorkerPool"
+
+    value "hosted-ubuntu" {
         prompt {
             description = ""
             label = ""
@@ -24,10 +26,8 @@ variable "Flyway.Database.Server" {
     }
 }
 
-variable "Flyway.Octopus.Workerpool" {
-    type = "WorkerPool"
-
-    value "hosted-ubuntu" {
+variable "Flyway.Database.Server" {
+    value "localhost:1433" {
         prompt {
             description = ""
             label = ""
