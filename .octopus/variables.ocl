@@ -6,22 +6,10 @@ variable "GitHub.Repo.ID" {
     value "HuxleyKendell/AutoOctopus" {}
 }
 
-variable "GitHub.Repo.Name" {
-    value "AutoPilot" {}
-}
-
-variable "Flyway.Migration.Workspace" {
-    value "C:\\WorkingFolders\\FWD\\OctoTest" {}
-}
-
 variable "Flyway.Octopus.Workerpool" {
     type = "WorkerPool"
 
     value "hosted-ubuntu" {}
-}
-
-variable "Flyway.Database.User(OLD)" {
-    value "Octopus" {}
 }
 
 variable "Flyway.Database.User" {
