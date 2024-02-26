@@ -31,7 +31,7 @@ step "build-stage" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "precisionpool"
+        worker_pool_variable = "Flyway.Octopus.Workerpool"
 
         packages "AutoOctopus" {
             acquisition_location = "ExecutionTarget"
@@ -82,7 +82,7 @@ step "report-creation-prodution-release" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "precisionpool"
+        worker_pool_variable = "Flyway.Octopus.Workerpool"
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
@@ -129,7 +129,7 @@ step "production-deployment" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool = "precisionpool"
+        worker_pool_variable = "Flyway.Octopus.Workerpool"
 
         packages "AutoOctopus" {
             acquisition_location = "Server"
