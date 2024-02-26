@@ -86,7 +86,7 @@ step "report-creation-prodution-release" {
                 
                 New-OctopusArtifact -Name "ProdReport.html" -Path "$extractPath\Reports\ProdReport.html"
                 
-                Copy-Item -Path "$extractPath\Reports\ProdReport.html" -Destination C:\Users\redgate\Desktop\ProdReport.html
+                #Copy-Item -Path "$extractPath\Reports\ProdReport.html" -Destination C:\Users\redgate\Desktop\ProdReport.html
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
