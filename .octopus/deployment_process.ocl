@@ -42,11 +42,11 @@ step "build-stage" {
                 $vScriptsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ValidateVScripts"
                 $uScriptsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
-                Write-Verbose $(Get-ChildItem $migrationsPath | %{$_.Name})
+                Write-Verbose [system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name}))
                 
                 flyway -user="$user" -password="$password" -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$cleandbsReportPath"
                 
-                Write-Verbose $(Get-ChildItem $migrationsPath | %{$_.Name})
+                Write-Verbose [system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name}))
                 flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$vScriptsReportPath"
                 
                 flyway -user="$user" -locations="filesystem:$migrationsPath" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" info undo info -url="$env_JDBC" -cleanDisabled='false' -target="$FIRST_UNDO_SCRIPT" -reportFilename="$uScriptsReportPath"
