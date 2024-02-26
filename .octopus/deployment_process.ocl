@@ -95,12 +95,14 @@ step "report-creation-prodution-release" {
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 write-host $extractPath
                 $migrationsPath = "$extractPath\migrations"
+                $configPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
+                $reportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ProdReport.html"
                 write-host "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath
                 
-                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath\flyway.toml" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$extractPath\Reports\ProdReport.html" -user="$user" -password="$password"
+                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$reportPath" -user="$user" -password="$password"
                 
-                New-OctopusArtifact -Name "ProdReport.html" -Path "$extractPath\Reports\ProdReport.html"
+                New-OctopusArtifact -Name "ProdReport.html" -Path $reportPath
                 
                 #Copy-Item -Path "$extractPath\Reports\ProdReport.html" -Destination C:\Users\redgate\Desktop\ProdReport.html
                 EOT
