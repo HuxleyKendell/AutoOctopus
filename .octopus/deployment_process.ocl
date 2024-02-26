@@ -8,7 +8,7 @@ step "build-stage" {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $flyway_license_key = $OctopusParameters["Flyway.Settings.LicenseKey"]
                 $project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
-                $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.JDBC"]);authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
+                $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetZBuild;encrypt=true;trustServerCertificate=true"
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
                 $user = $OctopusParameters["Flyway.Database.User"]
                 $password = $OctopusParameters["Flyway.Database.Password"]
@@ -65,12 +65,12 @@ step "report-creation-prodution-release" {
                 cd "AutoOctopus"
                 $flyway_license_key = $OctopusParameters["Flyway.Settings.LicenseKey"]
                 $project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
-                $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.JDBC"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
                 $user = $OctopusParameters["Flyway.Database.User"]
                 $password = $OctopusParameters["Flyway.Database.Password"]
                 $FailOnDrift = "false"
-                $buildUrl = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.JDBC"]);authentication=sqlPassword;databaseName=WidgetZCheck;encrypt=true;trustServerCertificate=true"
+                $buildUrl = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetZCheck;encrypt=true;trustServerCertificate=true"
                 
                 
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
@@ -122,7 +122,7 @@ step "production-deployment" {
                 cd "AutoOctopus"
                 $flyway_license_key = $OctopusParameters["Flyway.Settings.LicenseKey"]
                 $project_workspace = $OctopusParameters["Flyway.Migration.Workspace"]
-                $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.JDBC"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
+                $env_JDBC = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetProd;encrypt=true;trustServerCertificate=true"
                 $FIRST_UNDO_SCRIPT = "002.20230703112421"
                 $user = $OctopusParameters["Flyway.Database.User"]
                 $password = $OctopusParameters["Flyway.Database.Password"]
