@@ -1,23 +1,23 @@
-variable "user" {
-    value "Octopus" {}
+variable "OctopusPrintEvaluatedVariables" {
+    value "false" {}
 }
 
-variable "server" {
-    value "localhost" {}
-}
-
-variable "gitRepoName" {
-    value "AutoPilot" {}
-}
-
-variable "gitRepoID" {
+variable "GitHub.Repo.ID" {
     value "HuxleyKendell/AutoOctopus" {}
 }
 
-variable "workspace" {
-    value "C:\\WorkingFolders\\FWD\\OctoTest" {}
+variable "GitHub.Repo.Name" {
+    value "AutoPilot" {}
 }
 
-variable "OctopusPrintEvaluatedVariables" {
-    value "false" {}
+variable "Flyway.Database.JDBC" {
+    value "localhost" {}
+}
+
+variable "Flyway.Database.User" {
+    value "Octopus" {}
+}
+
+variable "Flyway.Migration.Workspace" {
+    value "C:\\WorkingFolders\\FWD\\OctoTest" {}
 }
