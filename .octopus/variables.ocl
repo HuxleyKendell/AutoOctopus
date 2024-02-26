@@ -27,3 +27,12 @@ variable "Flyway.Octopus.Workerpool" {
 variable "Flyway.Database.User(OLD)" {
     value "Octopus" {}
 }
+
+variable "Flyway.Database.User" {
+    value {
+        prompt {
+            description = ""
+            label = ""
+        }
+    }
+}
