@@ -4,17 +4,12 @@ step "find-worker-ip-address" {
     action {
         action_type = "Octopus.Script"
         properties = {
-            Octopus.Action.Script.ScriptBody = "curl ifconfig.net"
+            Octopus.Action.Script.ScriptBody = "curl --silent ifconfig.net"
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
             OctopusUseBundledTooling = "False"
         }
         worker_pool_variable = "Flyway.Octopus.Workerpool"
-
-        container {
-            feed = "docker-hub"
-            image = "octopuslabs/azure-workertools"
-        }
     }
 }
 
