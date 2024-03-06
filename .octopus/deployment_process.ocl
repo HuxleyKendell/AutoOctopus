@@ -91,14 +91,16 @@ step "report-creation-prodution-release" {
                 $FailOnDrift = "false"
                 $buildUrl = "jdbc:sqlserver://$($OctopusParameters["Flyway.Database.Server"]);authentication=sqlPassword;databaseName=WidgetZCheck;encrypt=true;trustServerCertificate=true"
                 
-                
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 Write-Verbose $extractPath
-                $migrationsPath = Join-Path $extractPath -ChildPath "migrations"
+                $migrationsPath = Join-Path -Path $extractPath -ChildPath "migrations"
                 $configPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
-                $reportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ProdReport.html"
+                $reportsPath = Join-Path -Path $extractPath -ChildPath "Reports"
+                $cleandbsReportPath = Join-Path $reportsPath -ChildPath "CleanDB"
+                $vScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateVScripts"
+                $uScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
-                Write-Verbose $([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))
+                Write-Verbose $([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))$([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))
                 
                 flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$reportPath" -user="$user" -password="$password"
                 
@@ -145,8 +147,11 @@ step "production-deployment" {
                 $extractPath = $OctopusParameters["Octopus.Action.Package[AutoOctopus].ExtractedPath"]
                 Write-Verbose $extractPath
                 $migrationsPath = Join-Path -Path $extractPath -ChildPath "migrations"
-                $extractPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
-                $reportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "CleanDB"
+                $configPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
+                $reportsPath = Join-Path -Path $extractPath -ChildPath "Reports"
+                $cleandbsReportPath = Join-Path $reportsPath -ChildPath "CleanDB"
+                $vScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateVScripts"
+                $uScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
                 Write-Verbose $([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))
                 
