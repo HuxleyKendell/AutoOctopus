@@ -39,9 +39,10 @@ step "build-stage" {
                 Write-Verbose $extractPath
                 $migrationsPath = Join-Path -Path $extractPath -ChildPath "migrations"
                 $configPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
-                $cleandbsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "CleanDB"
-                $vScriptsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ValidateVScripts"
-                $uScriptsReportPath = Join-Path -Path $extractPath -ChildPath "Reports" -AdditionalChildPath "ValidateUScripts"
+                $reportsPath = Join-Path -Path $extractPath -ChildPath "Reports"
+                $cleandbsReportPath = Join-Path $reportsPath -ChildPath "CleanDB"
+                $vScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateVScripts"
+                $uScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
                 Write-Verbose $([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))
                 
