@@ -23,7 +23,7 @@ step "build-stage" {
                 $vScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateVScripts"
                 $uScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
-                Write-Verbose $([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))
+                Get-ChildItem $migrationsPath | %{ Write-Verbose $_.Name}
                 
                 flyway -user="$user" -password="$password" -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" info clean info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$cleandbsReportPath"
                 
@@ -78,7 +78,7 @@ step "report-creation-prodution-release" {
                 $vScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateVScripts"
                 $uScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
-                Write-Verbose $([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))$([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))
+                Get-ChildItem $migrationsPath | %{ Write-Verbose $_.Name}
                 
                 flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$reportPath" -user="$user" -password="$password"
                 
@@ -131,7 +131,7 @@ step "production-deployment" {
                 $vScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateVScripts"
                 $uScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
-                Write-Verbose $([system.String]::Join("`n", $(Get-ChildItem $migrationsPath | %{$_.Name})))
+                Get-ChildItem $migrationsPath | %{ Write-Verbose $_.Name}
                 
                 
                 flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath" -locations="filesystem:$migrationsPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$reportPath"
