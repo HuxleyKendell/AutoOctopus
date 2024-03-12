@@ -73,16 +73,16 @@ step "report-creation-prodution-release" {
                 Write-Verbose $extractPath
                 $migrationsPath = Join-Path -Path $extractPath -ChildPath "migrations"
                 $configPath = Join-Path -Path $extractPath -ChildPath "flyway.toml"
-                $reportsPath = Join-Path -Path $extractPath -ChildPath "Reports"
+                $reportsPath = Join-Path -Path $extractPath -ChildPath "Reports$([IO.Path]::DirectorySeparatorChar)report.html"
                 $cleandbsReportPath = Join-Path $reportsPath -ChildPath "CleanDB"
                 $vScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateVScripts"
                 $uScriptsReportPath = Join-Path $reportsPath -ChildPath "ValidateUScripts"
                 Write-Verbose "MP $migrationsPath" 
                 Get-ChildItem $migrationsPath | %{ Write-Verbose $_.Name}
                 
-                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$reportPath" -user="$user" -password="$password"
+                flyway check -dryrun -changes -drift migrate info -locations="filesystem:$migrationsPath" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" "-check.failOnDrift=$FailOnDrift" "-check.buildUrl=$buildUrl" "-check.buildUser=$user" "-check.buildPassword=$password" -url="$env_JDBC" -reportFilename="$reportsPath" -user="$user" -password="$password"
                 
-                New-OctopusArtifact -Name "ProdReport.html" -Path $reportPath
+                New-OctopusArtifact -Name "ProdReport.html" -Path $reportsPath
                 
                 #Copy-Item -Path "$extractPath\Reports\ProdReport.html" -Destination C:\Users\redgate\Desktop\ProdReport.html
                 EOT
