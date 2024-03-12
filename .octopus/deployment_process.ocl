@@ -134,7 +134,7 @@ step "production-deployment" {
                 Get-ChildItem $migrationsPath | %{ Write-Verbose $_.Name}
                 
                 
-                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$extractPath" -locations="filesystem:$migrationsPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$reportPath"
+                flyway -user="$user" -password="$password" -baselineOnMigrate="true" -licenseKey="$flyway_license_key" -configFiles="$configPath" -locations="filesystem:$migrationsPath" info migrate info -url="$env_JDBC" -cleanDisabled='false' -reportFilename="$reportPath"
                 
                 
                 EOT
